@@ -1,11 +1,11 @@
-class Band {
+class BandModel {
   String id;
   String name;
   int votes;
 
-  Band({this.id, this.name, this.votes});
+  BandModel({this.id, this.name, this.votes});
 
-  factory Band.fromMap(Map<String, dynamic> obj) => Band(
+  factory BandModel.fromMap(Map<String, dynamic> obj) => BandModel(
         id: obj['id'],
         name: obj['name'],
         votes: obj['votes'],
