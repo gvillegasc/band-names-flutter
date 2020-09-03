@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:band_names/src/models/band_model.dart';
+import 'package:band_names/src/services/socket_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -20,6 +22,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final socketService = Provider.of<SocketService>(context);
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -28,6 +31,18 @@ class _HomePageState extends State<HomePage> {
           elevation: 0,
           centerTitle: true,
           backgroundColor: Color(0xff17202A),
+          actions: [
+            Container(
+                margin: EdgeInsets.only(right: 10),
+                child: (socketService.serverStatus == ServerStatus.Online)
+                    ? Icon(
+                        Icons.wifi,
+                        color: Colors.green[200],
+                        size: 30,
+                      )
+                    : (Icon(Icons.signal_wifi_off,
+                        color: Colors.red[200], size: 30)))
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
