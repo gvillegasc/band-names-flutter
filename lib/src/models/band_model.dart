@@ -6,8 +6,8 @@ class BandModel {
   BandModel({this.id, this.name, this.votes});
 
   factory BandModel.fromMap(Map<String, dynamic> obj) => BandModel(
-        id: obj['id'],
-        name: obj['name'],
-        votes: obj['votes'],
+        id: obj.containsKey('id') ? obj['id'] : 'no-id',
+        name: obj.containsKey('id') ? obj['name'] : 'no-name',
+        votes: obj.containsKey('id') ? obj['votes'] : 'no-vote',
       );
 }
