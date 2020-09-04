@@ -74,6 +74,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _bandTile(BandModel band) {
+    final socketService = Provider.of<SocketService>(context, listen: false);
     return Dismissible(
       key: Key(band.id),
       direction: DismissDirection.startToEnd,
@@ -102,7 +103,7 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(fontSize: 15),
         ),
         onTap: () {
-          print(band.name);
+          socketService.socket.emit('vote-band', {'id': band.id});
         },
       ),
     );
