@@ -4,6 +4,7 @@ import 'package:band_names/src/models/band_model.dart';
 import 'package:band_names/src/services/socket_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pie_chart/pie_chart.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     final socketService = Provider.of<SocketService>(context, listen: false);
-    socketService.socket.on('active-bands', _handleActiveBands(bands));
+    socketService.socket.on('active-bands', _handleActiveBands);
     super.initState();
   }
 
@@ -64,9 +65,16 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Color(0xff17202A),
           onPressed: addNewBand,
         ),
-        body: ListView.builder(
-            itemCount: bands.length,
-            itemBuilder: (context, i) => _bandTile(bands[i])));
+        body: Column(
+          children: [
+            _showGraph(),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: bands.length,
+                  itemBuilder: (context, i) => _bandTile(bands[i])),
+            )
+          ],
+        ));
   }
 
   Widget _bandTile(BandModel band) {
@@ -154,5 +162,44 @@ class _HomePageState extends State<HomePage> {
       });
     }
     Navigator.pop(context);
+  }
+
+  Widget _showGraph() {
+    Map<String, double> dataMap = new Map();
+    bands.forEach((band) {
+      dataMap.putIfAbsent(band.name, () => band.votes.toDouble());
+    });
+
+    final List<Color> colorList = [
+      Colors.blue[50],
+      Colors.blue[200],
+      Colors.pink[50],
+      Colors.pink[200],
+      Colors.yellow[50],
+      Colors.yellow[200],
+    ];
+
+    return Container(
+      child: PieChart(
+        dataMap: dataMap,
+        animationDuration: Duration(milliseconds: 800),
+        chartLegendSpacing: 32.0,
+        chartRadius: MediaQuery.of(context).size.width / 2.7,
+        showChartValuesInPercentage: true,
+        showChartValues: true,
+        showChartValuesOutside: false,
+        chartValueBackgroundColor: Colors.grey[200],
+        colorList: colorList,
+        showLegends: true,
+        legendPosition: LegendPosition.right,
+        decimalPlaces: 1,
+        initialAngle: 0,
+        chartValueStyle: defaultChartValueStyle.copyWith(
+          color: Colors.blueGrey[900].withOpacity(0.9),
+        ),
+        chartType: ChartType.disc,
+      ),
+      height: 200,
+    );
   }
 }
