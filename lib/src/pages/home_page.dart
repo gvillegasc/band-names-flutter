@@ -65,16 +65,36 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Color(0xff17202A),
           onPressed: addNewBand,
         ),
-        body: Column(
-          children: [
-            _showGraph(),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: bands.length,
-                  itemBuilder: (context, i) => _bandTile(bands[i])),
-            )
-          ],
-        ));
+        body: (socketService.serverStatus == ServerStatus.Online)
+            ? Column(
+                children: ([
+                _showGraph(),
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: bands.length,
+                      itemBuilder: (context, i) => _bandTile(bands[i])),
+                )
+              ]))
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    child: Text(
+                      "Desconectado del servidor",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 200,
+                    child: Image(
+                      image: AssetImage('assets/images/disconnected.png'),
+                    ),
+                  )
+                ],
+              ));
   }
 
   Widget _bandTile(BandModel band) {
