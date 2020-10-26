@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            "BandName",
+            "Band Name",
           ),
           elevation: 0,
           centerTitle: true,
